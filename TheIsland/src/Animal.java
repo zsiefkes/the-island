@@ -8,7 +8,16 @@ public interface Animal {
 	
 	// getters
 	public char getSymbol();
-//	- detect food
+	public int getEnergy();
+	
+	// increase and decrease energy. overloaded methods, take optional energy increase/decrase argument
+	public void increaseEnergy();
+	public void decreaseEnergy();
+	public void increaseEnergy(int energy);
+	public void decreaseEnergy(int energy);
+
+	public String toString();
+	//	- detect food
 //	public void detectFood();
 ////	- detect water
 //	public void detectWater();

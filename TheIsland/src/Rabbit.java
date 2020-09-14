@@ -137,12 +137,19 @@ public class Rabbit implements Animal {
 		return energy;
 	}
 	
-	public void addEnergy(int energy) {
+	public void increaseEnergy(int energy) {
 		this.energy = this.energy + energy;
 	}
-	
-	public void reduceEnergy(int energy) {
+	public void decreaseEnergy(int energy) {
 		this.energy = this.energy - energy;
+	}
+
+	// overloaded methods. if no argument provided, adjust energy by 1. 
+	public void increaseEnergy() {
+		this.energy++;
+	}
+	public void decreaseEnergy() {
+		this.energy--;
 	}
 
 //	public void setEnergy(int energy) {
@@ -161,9 +168,10 @@ public class Rabbit implements Animal {
 		this.island = island;
 	}
 
+	@Override
 	public String toString() {
-		return "Rabbit\n x: " + x + "\n y: " + y
-				+ "\n energy: " + energy + "\n id: " + id + "";
+		return "Rabbit [symbol=" + symbol + ", x=" + x + ", y=" + y + ", energy=" + energy + ", id=" + id + ", island="
+				+ island + "]";
 	}
 
 }

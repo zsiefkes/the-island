@@ -5,9 +5,10 @@ public class Island {
 	private int width;
 	private int height;
 
-	// fields for storing unspecified number of animals and geographicalFeatures
+	// fields for storing and animals and geographicalFeatures.
 	ArrayList<Animal> animals = new ArrayList<Animal>();
 	ArrayList<GeographicalFeature> geographicalFeatures = new ArrayList<GeographicalFeature>();
+	ArrayList<Grass> grassPatches = new ArrayList<Grass>();
 
 	// constructor taking width and height
 	public Island(int width, int height) {
@@ -15,29 +16,28 @@ public class Island {
 			this.height = height;
 		}
 
-//	// check if any other animal is residing in a certain position and return a boolean indicating so.
-//	public boolean hasPlant(int x, int y) {
-//		
-//		// boolean to return
-//		boolean isOccupied = false;
-//		
-//		// loop through all geographical features
-//		for (GeographicalFeature b : geographicalFeatures) {
-//			
-//			// check if feature's position matches input arguments
-//			if (b.getX() == x && b.getY() == y) {
-//				
-//				// check if 
-//				
-//				// set boolean to true and break out of loop
-//				isOccupied = true;
-//				break;
-//			}
-//		}
-//		
-//		// return boolean
-//		return isOccupied;
-//	}
+	// check if a grass patch is the coordinate in argument and return the Grass object if so
+	public Grass hasGrass(int x, int y) {
+		
+		// Grass to return
+		Grass grass = null;
+		
+		// loop through all grass patches
+		for (Grass g : grassPatches) {
+			
+			// check if grass' position matches input arguments
+			if (g.getX() == x && g.getY() == y) {
+				
+				// set grass in variable and break out of loop
+				grass = g;
+				break;
+			}
+		}
+		
+		// return grass
+		return grass;
+	}
+	
 //	// check if any other animal is residing in a certain position and return a boolean indicating so.
 //	public boolean hasWater(int x, int y) {
 //		
@@ -83,10 +83,44 @@ public class Island {
 		return isOccupied;
 	}
 	
-	// randomly generate a specified number of geographicalFeatures
-	public void genGeographicalFeatures(int numGeographicalFeatures) {
+//	// randomly generate a specified number of geographicalFeatures
+//	public void genGeographicalFeatures(int numGeographicalFeatures) {
+//		
+//		for (int i = 0; i < numGeographicalFeatures; i++) {
+//			
+//			// randomly pick a size between 0 and 9
+//			int size = (int) (Math.random() * 9);
+//			
+//			// randomly pick coordinates within island boundaries
+//			int x = (int) (Math.random() * this.width);
+//			int y = (int) (Math.random() * this.height);
+//			
+//			// check position is not already occupied and try again until one is found. or,
+//			// give up after 20 tries
+//			int count = 0;
+//			while (isOccupied(x, y) || count > 20) {
+//				x = (int) (Math.random() * width);
+//				y = (int) (Math.random() * height);
+//				count++;
+//			}
+//			
+//			// set default geographicalFeature symbol for now
+//			char symbol = '+';
+//			
+//			// create geographicalFeature
+//			GeographicalFeature geographicalFeature = new GeographicalFeature(size, symbol, x, y);
+//			
+//			// set island on geographicalFeature to this island
+//			geographicalFeature.setIsland(this);
+//			
+//			// add geographicalFeature to list of geographicalFeatures
+//			this.geographicalFeatures.add(geographicalFeature);
+//		}
+//	}
+	// randomly generate a specified number of patches of grass
+	public void genGrass(int numGrass) {
 
-		for (int i = 0; i < numGeographicalFeatures; i++) {
+		for (int i = 0; i < numGrass; i++) {
 
 			// randomly pick a size between 0 and 9
 			int size = (int) (Math.random() * 9);
@@ -95,26 +129,22 @@ public class Island {
 			int x = (int) (Math.random() * this.width);
 			int y = (int) (Math.random() * this.height);
 
-			// check position is not already occupied and try again until one is found. or,
-			// give up after 20 tries
+			// check position is not already occupied and try again until one is found. or, give up after 20 tries
 			int count = 0;
 			while (isOccupied(x, y) || count > 20) {
 				x = (int) (Math.random() * width);
 				y = (int) (Math.random() * height);
 				count++;
 			}
+			// create grass
+			Grass grass = new Grass(size, x, y);
 
-			// set default geographicalFeature symbol for now
-			char symbol = '+';
+			// set island on grass to this island
+			grass.setIsland(this);
 
-			// create geographicalFeature
-			GeographicalFeature geographicalFeature = new GeographicalFeature(size, symbol, x, y);
-
-			// set island on geographicalFeature to this island
-			geographicalFeature.setIsland(this);
-
-			// add geographicalFeature to list of geographicalFeatures
-			this.geographicalFeatures.add(geographicalFeature);
+			// add grass to list of geographical features and grass patches
+			this.geographicalFeatures.add(grass);
+			this.grassPatches.add(grass);
 		}
 	}
 
@@ -137,8 +167,8 @@ public class Island {
 //				count++;
 //			}
 //			
-//			// randomly pick energy level from 10 through 100.
-//			int energy = (int) (Math.random() * 90 + 10);
+//			// randomly pick energy level from 5 through 30.
+//			int energy = (int) (Math.random() * 25 + 5);
 //			
 //			animal = new Rabbit(x, y, energy);
 //			
@@ -165,8 +195,8 @@ public class Island {
 				count++;
 			}
 
-			// randomly pick energy level from 10 through 100.
-			int energy = (int) (Math.random() * 90 + 10);
+			// randomly pick energy level from 5 through 30.
+			int energy = (int) (Math.random() * 25 + 5);
 
 			Rabbit rabbit = new Rabbit(x, y, energy);
 
@@ -246,7 +276,7 @@ public class Island {
 							// draw geographicalFeature's symbol
 							System.out.print(p.getSymbol());
 
-							// break out of checking animals loop
+							// break out of checking geographical features loop
 							break;
 						}
 					}
@@ -272,17 +302,58 @@ public class Island {
 
 	}
 
+	// randomly moves (or doesn't move) all the animals in the island. if a animal tries to move to a spot occupied by another animal, the move method will put it back in its original position and no move will occur.
 	public void updateIsland() {
-		// randomly moves (or doesn't move) all the animals in the island. if a animal tries to move to a spot occupied by another animal, the move method will put it back in
-		// its original position and no move will occur.
-		// invokes move method on Animal class to move animals - does not manipulate animal position directly.
 
+		// list of animals that die this turn
+		ArrayList<Animal> deadAnimals = new ArrayList<Animal>();
+		
 		// loop over all animals
-		for (Animal b : this.animals) {
+		for (Animal a : this.animals) {
 
-			// generate random number between 0 and 1 and call move method
-			b.move(Math.random());
+			// check if the animal is on a patch of grass, and if its energy level is below 10.
+			Grass grass = hasGrass(a.getX(), a.getY());
+			
+			// if so, have animal feed on the grass for this iteration
+			if (grass != null && a.getEnergy() < 10) {
+				grass.decreaseSize(4);
+				a.increaseEnergy(10);
+				
+			} else {
+				// otherwise, move the animal randomly. generate random number between 0 and 1 and attempt to move the animal in that direction.
+				a.move(Math.random());
+			}
+			
+			// reduce all animal's energy level by default amount
+			a.decreaseEnergy();
+			
+			// if the animal's energy has reduced to 0, add to list of dead.
+			if (a.getEnergy() == 0) {
+				deadAnimals.add(a);
+			}
 		}
+		
+		// remove dead animals from island (no feeding on dead bodies here...)
+		for (Animal d : deadAnimals) {
+			this.animals.remove(d);
+		}
+		
+		// list of plants to remove if they've been eaten away. just grass for now
+		ArrayList<Grass> deadGrass = new ArrayList<Grass>();
+		
+		for (Grass g : grassPatches) {
+			// check if any grass patches have had their size reduce to 0 from being eaten
+			if (g.getSize() == 0) {
+				deadGrass.add(g);
+			} else {
+				// otherwise, grow that grass
+				g.increaseSize();
+			}
+		}
+		
+		// for testing purposes, show me the details of the rabbits and grasses:
+//		printAnimalInfo();
+//		printGeographicalFeatureInfo();
 	}
 
 	// run animation of island, updating and redrawing a specified number of times. update island with a thread sleep in between
@@ -332,4 +403,14 @@ public class Island {
 		this.animals.remove(animal);
 	}
 
+	public void reportNumAnimals() {
+		// tally up the number of each surviving animal and print.
+		int numRabbits = 0;
+		for (Animal a : animals) {
+			if (a instanceof Rabbit) {
+				numRabbits++;
+			}
+		}
+		System.out.println("There are " + numRabbits + " surviving rabbits.");
+	}
 }

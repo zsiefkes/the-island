@@ -13,4 +13,6 @@ public interface GeographicalFeature {
 	public int getY();
 	public char getSymbol();
 	public Island getIsland();
+	
+	public String toString();
 }
