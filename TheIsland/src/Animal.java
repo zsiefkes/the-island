@@ -1,7 +1,13 @@
 
 public interface Animal {
 //	- move
-	public void move();
+	public void move(double direction);
+	// locate
+	public int getX();
+	public int getY();
+	
+	// getters
+	public char getSymbol();
 //	- detect food
 //	public void detectFood();
 ////	- detect water
