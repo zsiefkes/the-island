@@ -36,9 +36,9 @@ public class Rabbit implements Animal {
 		idList.add(id);
 	}
 
-	// change the rabbit's position, 1 coordinate at a time, either North, East, South or West
+	// change the rabbit's position, distance cells at a time, either North, East, South or West
 	// takes double between 0 and 1 as direction and determines movement using quadrants
-	public void move(double direction) {
+	public void move(double direction, int distance) {
 
 		// store initial position
 		int initX = this.x;
@@ -48,23 +48,23 @@ public class Rabbit implements Animal {
 		// initial coordinates.
 		int newX = initX;
 		int newY = initY;
-
+		
 		// argument direction should be between 0 and 1. if not, no movement happens
 		if (direction < 0.25) {
 			// move north
-			newY = initY - 1;
+			newY = initY - distance;
 
 		} else if (direction < 0.5) {
 			// move east
-			newX = initX + 1;
+			newX = initX + distance;
 
 		} else if (direction < 0.75) {
 			// move south
-			newY = initY + 1;
+			newY = initY + distance;
 
 		} else if (direction < 1) {
 			// move west
-			newX = initX - 1;
+			newX = initX - distance;
 		}
 
 		// if the rabbit belongs to a island,
@@ -104,12 +104,66 @@ public class Rabbit implements Animal {
 		this.x = newX;
 		this.y = newY;
 	}
-
-	@Override
-	public int compareTo(Rabbit otherRabbit) {
-		// compareTo method fulfilling Comparable<Rabbit> interface
-		// set natural ordering on rabbits using their integer id.
-		return Integer.compare(getId(), otherRabbit.getId());
+	
+	// overloaded method. if no distance provided, apply default or pick randomly between options.
+	public void move(double direction) {
+		// rabbits can move one or two cells at a time. pick randomly.
+		int distance = (int)(Math.random()*2 + 1);
+		move(direction, distance);
+	}
+	
+	// food related methods
+	public boolean isHungry() {
+		// return whether energy level is below a certain threshold
+		return (energy < 10);
+	}
+	
+	// check if the rabbit is on a patch of grass, and feed on the grass if so. return whether feeding took place
+	public boolean feedSelf() {
+		Grass grass = island.hasGrass(x, y);
+		if (grass != null) {
+			grass.decreaseSize(4);
+			increaseEnergy(10);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void seekFood() {
+		// rabbits can detect grass up up to two cells away (square of side length 5 cells)
+		// if grass is detected, move towards that patch of grass
+		if (island.hasGrass(x, y) != null) {
+			// rabbit is currently at a patch of grass. feed self and do not move.
+			feedSelf();
+			
+		// try to move east first if there is food towards the east
+		} else if (island.hasGrass(x + 1, y) != null || island.hasGrass(x + 1, y + 1) != null || island.hasGrass(x + 1, y - 1) != null || island.hasGrass(x + 1, y + 2) != null || island.hasGrass(x + 1, y - 2) != null) {
+			move(0.3, 1);
+		} else if (island.hasGrass(x + 2, y) != null || island.hasGrass(x + 2, y + 1) != null || island.hasGrass(x + 2, y - 1) != null || island.hasGrass(x + 2, y + 2) != null || island.hasGrass(x + 2, y - 2) != null) {
+			move(0.3, 2);
+			
+		// try to move west first if there is food towards the west
+		} else if (island.hasGrass(x - 1, y) != null || island.hasGrass(x - 1, y + 1) != null || island.hasGrass(x - 1, y - 1) != null || island.hasGrass(x - 1, y + 2) != null || island.hasGrass(x - 1, y - 2) != null) {
+			move(0.8, 1);
+		} else if (island.hasGrass(x - 2, y) != null || island.hasGrass(x - 2, y + 1) != null || island.hasGrass(x - 2, y - 1) != null || island.hasGrass(x - 2, y + 2) != null || island.hasGrass(x - 2, y - 2) != null) {
+			move(0.8, 2);
+			
+		// if there is food directly north, head north
+		} else if (island.hasGrass(x, y - 1) != null) {
+			move(0.1, 1);
+		} else if (island.hasGrass(x, y - 2) != null) {
+			move(0.1, 2);
+			
+		// if there is food directly south, head south
+		} else if (island.hasGrass(x, y + 1) != null) {
+			move (0.6, 1);
+		} else if (island.hasGrass(x, y + 2) != null) {
+			move (0.6, 2);
+		} else {
+			// move randomly in search of food.
+			move(Math.random(), 2);
+		}
 	}
 
 	// Getters and setters
@@ -151,10 +205,6 @@ public class Rabbit implements Animal {
 	public void decreaseEnergy() {
 		this.energy--;
 	}
-
-//	public void setEnergy(int energy) {
-//		this.energy = energy;
-//	}
 
 	public int getId() {
 		return id;

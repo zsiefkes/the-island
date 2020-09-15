@@ -1,58 +1,19 @@
-//import java.util.ArrayList;
+import java.util.ArrayList;
 
-public interface Animal {
-//	- move
-	public void move(double direction);
-	// locate
-	public int getX();
-	public int getY();
-	
-	// getters
-	public char getSymbol();
-	public int getEnergy();
-	
-	// increase and decrease energy. overloaded methods, take optional energy increase/decrase argument
-	public void increaseEnergy();
-	public void decreaseEnergy();
-	public void increaseEnergy(int energy);
-	public void decreaseEnergy(int energy);
-
-	public String toString();
-	public void setIsland(Island island);
-	
-	// feeding and hunger
-	public boolean isHungry();
-	public boolean feedSelf();
-	public void seekFood();
-	
-	//	- detect food
-//	public void detectFood();
-////	- detect water
-//	public void detectWater();
-////	- detect predators
-//	public void detectPredators();
-////	- detect prey
-//	public void detectPrey();
-////	- mate with creatures of the same type
-//	public void mate();
-}
-
-/* import java.util.ArrayList;
-
-public class Rabbit implements Creature {
+public class Kiwi implements Animal {
 	// instance attributes
-	private char symbol = 'R';
+	private char symbol = 'K';
 	private int x; // horizontal position
 	private int y; // vertical position
 	private int energy;
 	private int id; // unique id
-	private Island island; // island the rabbit belongs to, if any.
+	private Island island; // island the kiwi belongs to, if any.
 
 	// static field to store ids. don't forget it has to be static!!!
 	private static ArrayList<Integer> idList = new ArrayList<Integer>();
 
 	// overloaded constructor, takes no arguments and sets pre-defined attributes
-	public Rabbit() {		
+	public Kiwi() {
 		this.x = 0;
 		this.y = 0;
 		this.energy = 100;
@@ -63,8 +24,9 @@ public class Rabbit implements Creature {
 		idList.add(id);
 	}
 
-	// overloaded constructor function taking position and energy level as arguments. does not initiate with an island.
-	public Rabbit(int x, int y, int energy) {
+	// overloaded constructor function taking position and energy level as
+	// arguments. does not initiate with an island.
+	public Kiwi(int x, int y, int energy) {
 		this.x = x;
 		this.y = y;
 		this.energy = energy;
@@ -75,8 +37,10 @@ public class Rabbit implements Creature {
 		idList.add(id);
 	}
 
-	// change the rabbit's position, 1 coordinate at a time, either North, East, South or West
-	// takes double between 0 and 1 as direction and determines movement using quadrants
+	// change the kiwi's position, 1 coordinate at a time, either North, East, South
+	// or West
+	// takes double between 0 and 1 as direction and determines movement using
+	// quadrants
 	public void move(double direction) {
 
 		// store initial position
@@ -106,10 +70,11 @@ public class Rabbit implements Creature {
 			newX = initX - 1;
 		}
 
-		// if the rabbit belongs to a island,
+		// if the kiwi belongs to a island,
 		if (this.island != null) {
 
-			// first check it did not move out of the island's borders. obtain island width and height
+			// first check it did not move out of the island's borders. obtain island width
+			// and height
 			int width = this.island.getWidth();
 			int height = this.island.getHeight();
 
@@ -130,7 +95,7 @@ public class Rabbit implements Creature {
 				newY = 0;
 			}
 
-			// next, check it did not move to a spot already occupied by another rabbit.
+			// next, check it did not move to a spot already occupied by another kiwi.
 			if (island.isOccupied(newX, newY)) {
 
 				// if it is, move it back to its original position
@@ -142,6 +107,23 @@ public class Rabbit implements Creature {
 		// set new position
 		this.x = newX;
 		this.y = newY;
+	}
+
+	// food related methods
+	public boolean isHungry() {
+		// return whether energy level is below a certain threshold
+		return (energy < 6);
+	}
+
+	// kiwis can feed anywhere on grubs under the ground :) 
+	public boolean feedSelf() {
+		increaseEnergy(2);
+		return true;
+	}
+	
+	public void seekFood() {
+		// kiwis can feed anywhere. 
+		feedSelf();
 	}
 
 	// Getters and setters
@@ -168,18 +150,20 @@ public class Rabbit implements Creature {
 	public int getEnergy() {
 		return energy;
 	}
-	
+
 	public void increaseEnergy(int energy) {
 		this.energy = this.energy + energy;
 	}
+
 	public void decreaseEnergy(int energy) {
 		this.energy = this.energy - energy;
 	}
 
-	// overloaded methods. if no argument provided, adjust energy by 1. 
+	// overloaded methods. if no argument provided, adjust energy by 1.
 	public void increaseEnergy() {
 		this.energy++;
 	}
+
 	public void decreaseEnergy() {
 		this.energy--;
 	}
@@ -198,9 +182,8 @@ public class Rabbit implements Creature {
 
 	@Override
 	public String toString() {
-		return "Rabbit [symbol=" + symbol + ", x=" + x + ", y=" + y + ", energy=" + energy + ", id=" + id + ", island="
+		return "Kiwi [symbol=" + symbol + ", x=" + x + ", y=" + y + ", energy=" + energy + ", id=" + id + ", island="
 				+ island + "]";
 	}
 
 }
-*/

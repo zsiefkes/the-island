@@ -7,12 +7,12 @@ public class EntryPoint {
 		Island islandB = new Island(60, 10);
 		
 		// generate a handful of rabbits to each island
-		islandA.genRabbits(10);
-		islandB.genRabbits(20);
+		islandA.genAnimals(10);
+		islandB.genAnimals(20);
 		
 		// add several patches of grass
-		islandA.genGrass(10);
-		islandB.genGrass(20);
+		islandA.genGrass(20);
+		islandB.genGrass(50);
 		
 		// run island animations with 10 updates and report number of living rabbits at end.
 		islandA.animateIsland(10);
