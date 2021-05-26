@@ -6,6 +6,7 @@ public class Kiwi implements Animal {
 	private int x; // horizontal position
 	private int y; // vertical position
 	private int energy;
+	private int hydration;
 	private int id; // unique id
 	private Island island; // island the kiwi belongs to, if any.
 
@@ -17,6 +18,7 @@ public class Kiwi implements Animal {
 		this.x = 0;
 		this.y = 0;
 		this.energy = 100;
+		this.hydration = 50;
 		this.island = null;
 		// generate unique id based on idList size
 		this.id = idList.size() + 1;
@@ -30,6 +32,7 @@ public class Kiwi implements Animal {
 		this.x = x;
 		this.y = y;
 		this.energy = energy;
+		this.hydration = 50;
 		this.island = null;
 		// generate unique id based on idList size
 		this.id = idList.size() + 1;
@@ -37,10 +40,8 @@ public class Kiwi implements Animal {
 		idList.add(id);
 	}
 
-	// change the kiwi's position, 1 coordinate at a time, either North, East, South
-	// or West
-	// takes double between 0 and 1 as direction and determines movement using
-	// quadrants
+	// change the kiwi's position, 1 coordinate at a time, either North, East, South or West
+	// takes double between 0 and 1 as direction and determines movement using quadrants
 	public void move(double direction) {
 
 		// store initial position
@@ -95,7 +96,7 @@ public class Kiwi implements Animal {
 				newY = 0;
 			}
 
-			// next, check it did not move to a spot already occupied by another kiwi.
+			// next, check it did not move to a spot already occupied by another animal.
 			if (island.isOccupied(newX, newY)) {
 
 				// if it is, move it back to its original position
@@ -114,7 +115,21 @@ public class Kiwi implements Animal {
 		// return whether energy level is below a certain threshold
 		return (energy < 6);
 	}
-
+	
+	public boolean isThirsty() {
+		return (hydration < 6);
+	}
+ 
+	public boolean drinkWater() {
+		// check if rabbit is at water source and increase hydration if so
+		if (island.hasWater(x, y)) {
+			increaseHydration(20);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	// kiwis can feed anywhere on grubs under the ground :) 
 	public boolean feedSelf() {
 		increaseEnergy(2);
@@ -167,6 +182,25 @@ public class Kiwi implements Animal {
 	public void decreaseEnergy() {
 		this.energy--;
 	}
+
+	public int getHydration() {
+		return hydration;
+	}
+
+	public void increaseHydration(int hydration) {
+		this.hydration = this.hydration + hydration;
+	}
+	public void decreaseHydration(int hydration) {
+		this.hydration = this.hydration - hydration;
+	}
+	// overloaded methods. if no argument provided, adjust hydration by 1. 
+	public void increaseHydration() {
+		this.hydration++;
+	}
+	public void decreaseHydration() {
+		this.hydration--;
+	}
+
 
 	public int getId() {
 		return id;

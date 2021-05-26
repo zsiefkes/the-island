@@ -10,9 +10,11 @@ public class EntryPoint {
 		islandA.genAnimals(10);
 		islandB.genAnimals(20);
 		
-		// add several patches of grass
+		// add grass and water 
 		islandA.genGrass(20);
+		islandA.genWater(20);
 		islandB.genGrass(50);
+		islandB.genWater(30);
 		
 		// run island animations with 10 updates and report number of living rabbits at end.
 		islandA.animateIsland(10);
@@ -20,7 +22,6 @@ public class EntryPoint {
 		islandB.animateIsland(10);
 		islandB.reportNumAnimals();
 				
-		// ### grass needs to grow with each update. check this is happening?
 	}
 	
 	public static void main(String[] args) {

@@ -6,6 +6,7 @@ public class Rabbit implements Animal {
 	private int x; // horizontal position
 	private int y; // vertical position
 	private int energy;
+	private int hydration;
 	private int id; // unique id
 	private Island island; // island the rabbit belongs to, if any.
 
@@ -17,6 +18,7 @@ public class Rabbit implements Animal {
 		this.x = 0;
 		this.y = 0;
 		this.energy = 100;
+		this.hydration = 50;
 		this.island = null;
 		// generate unique id based on idList size
 		this.id = idList.size() + 1;
@@ -29,6 +31,7 @@ public class Rabbit implements Animal {
 		this.x = x;
 		this.y = y;
 		this.energy = energy;
+		this.hydration = 50;
 		this.island = null;
 		// generate unique id based on idList size
 		this.id = idList.size() + 1;
@@ -91,7 +94,7 @@ public class Rabbit implements Animal {
 				newY = 0;
 			}
 
-			// next, check it did not move to a spot already occupied by another rabbit.
+			// next, check it did not move to a spot already occupied by another animal.
 			if (island.isOccupied(newX, newY)) {
 
 				// if it is, move it back to its original position
@@ -118,6 +121,20 @@ public class Rabbit implements Animal {
 		return (energy < 10);
 	}
 	
+	public boolean isThirsty() {
+		return (hydration < 6);
+	}
+
+	public boolean drinkWater() {
+		// check if rabbit is at water source and increase hydration if so
+		if (island.hasWater(x, y)) {
+			increaseHydration(20);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	// check if the rabbit is on a patch of grass, and feed on the grass if so. return whether feeding took place
 	public boolean feedSelf() {
 		Grass grass = island.hasGrass(x, y);
@@ -132,11 +149,11 @@ public class Rabbit implements Animal {
 	
 	public void seekFood() {
 		// rabbits can detect grass up up to two cells away (square of side length 5 cells)
-		// if grass is detected, move towards that patch of grass
 		if (island.hasGrass(x, y) != null) {
 			// rabbit is currently at a patch of grass. feed self and do not move.
 			feedSelf();
 			
+		// if grass is detected, move towards that patch of grass
 		// try to move east first if there is food towards the east
 		} else if (island.hasGrass(x + 1, y) != null || island.hasGrass(x + 1, y + 1) != null || island.hasGrass(x + 1, y - 1) != null || island.hasGrass(x + 1, y + 2) != null || island.hasGrass(x + 1, y - 2) != null) {
 			move(0.3, 1);
@@ -160,8 +177,9 @@ public class Rabbit implements Animal {
 			move (0.6, 1);
 		} else if (island.hasGrass(x, y + 2) != null) {
 			move (0.6, 2);
+			
 		} else {
-			// move randomly in search of food.
+			// if no nearby grass is detected, move randomly in search of food.
 			move(Math.random(), 2);
 		}
 	}
@@ -186,24 +204,41 @@ public class Rabbit implements Animal {
 	public void setY(int y) {
 		this.y = y;
 	}
-
+	
 	public int getEnergy() {
 		return energy;
 	}
-	
+
+	public int getHydration() {
+		return hydration;
+	}
+
 	public void increaseEnergy(int energy) {
 		this.energy = this.energy + energy;
 	}
 	public void decreaseEnergy(int energy) {
 		this.energy = this.energy - energy;
 	}
-
 	// overloaded methods. if no argument provided, adjust energy by 1. 
 	public void increaseEnergy() {
 		this.energy++;
 	}
 	public void decreaseEnergy() {
 		this.energy--;
+	}
+	
+	public void increaseHydration(int hydration) {
+		this.hydration = this.hydration + hydration;
+	}
+	public void decreaseHydration(int hydration) {
+		this.hydration = this.hydration - hydration;
+	}
+	// overloaded methods. if no argument provided, adjust hydration by 1. 
+	public void increaseHydration() {
+		this.hydration++;
+	}
+	public void decreaseHydration() {
+		this.hydration--;
 	}
 
 	public int getId() {

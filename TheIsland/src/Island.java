@@ -9,6 +9,7 @@ public class Island {
 	ArrayList<Animal> animals = new ArrayList<Animal>();
 	ArrayList<GeographicalFeature> geographicalFeatures = new ArrayList<GeographicalFeature>();
 	ArrayList<Grass> grassPatches = new ArrayList<Grass>();
+	ArrayList<Water> waterPatches = new ArrayList<Water>();
 
 	// constructor taking width and height
 	public Island(int width, int height) {
@@ -38,85 +39,99 @@ public class Island {
 		return grass;
 	}
 
-//	// check if any other animal is residing in a certain position and return a boolean indicating so.
-//	public boolean hasWater(int x, int y) {
-//		
-//		// boolean to return
-//		boolean isOccupied = false;
-//		
-//		// loop through all animals
-//		for (Animal b : this.animals) {
-//			
-//			// check if animal's position matches input arguments
-//			if (b.getX() == x && b.getY() == y) {
-//				
-//				// set boolean to true and break out of loop
-//				isOccupied = true;
-//				break;
-//			}
-//		}
-//		
-//		// return boolean
-//		return isOccupied;
-//	}
+	// check if there is water at a certain coordinate and return a boolean indicating so.
+	public boolean hasWater(int x, int y) {
+		
+		// boolean to return
+		boolean hasWater = false;
+		
+		// loop through all water patches
+		for (Water w : waterPatches) {
+			
+			// check if animal's position matches input arguments
+			if (w.getX() == x && w.getY() == y) {
+				
+				// set boolean to true and break out of loop
+				hasWater = true;
+				break;
+			}
+		}
+		
+		// return boolean
+		return hasWater;
+	}
 
-	// check if any other animal is residing in a certain position and return a
-	// boolean indicating so.
+	// check if any other animal is residing in a certain position and return a boolean indicating so.
 	public boolean isOccupied(int x, int y) {
-
+		
 		// boolean to return
 		boolean isOccupied = false;
-
+		
 		// loop through all animals
-		for (Animal b : this.animals) {
-
+		for (Animal b : animals) {
+			
 			// check if animal's position matches input arguments
 			if (b.getX() == x && b.getY() == y) {
-
+				
 				// set boolean to true and break out of loop
 				isOccupied = true;
 				break;
 			}
 		}
-
+		
 		// return boolean
 		return isOccupied;
 	}
+	
+	// check if any other geographical feature is in a certain position and return a boolean indicating so.
+	public boolean hasGeographicalFeature(int x, int y) {
 
-//	// randomly generate a specified number of geographicalFeatures
-//	public void genGeographicalFeatures(int numGeographicalFeatures) {
-//		
-//		for (int i = 0; i < numGeographicalFeatures; i++) {
-//			
-//			// randomly pick a size between 0 and 9
-//			int size = (int) (Math.random() * 9);
-//			
-//			// randomly pick coordinates within island boundaries
-//			int x = (int) (Math.random() * this.width);
-//			int y = (int) (Math.random() * this.height);
-//			
-//			// check position is not already occupied and try again until one is found. or,
-//			// give up after 20 tries
-//			int count = 0;
-//			while (isOccupied(x, y) || count > 20) {
-//				x = (int) (Math.random() * width);
-//				y = (int) (Math.random() * height);
-//				count++;
-//			}
-//			
-//			// set default geographicalFeature symbol for now
-//			char symbol = '+';
-//			
-//			// create geographicalFeature
-//			GeographicalFeature geographicalFeature = new GeographicalFeature(size, symbol, x, y);
-//			
-//			// set island on geographicalFeature to this island
-//			geographicalFeature.setIsland(this);
-//			
-//			// add geographicalFeature to list of geographicalFeatures
-//			this.geographicalFeatures.add(geographicalFeature);
-//		}
-//	}
+		// boolean to return
+		boolean hasFeature = false;
+
+		// loop through all features
+		for (GeographicalFeature g : geographicalFeatures) {
+
+			// check if feature's position matches input arguments
+			if (g.getX() == x && g.getY() == y) {
+
+				// set boolean to true and break out of loop
+				hasFeature = true;
+				break;
+			}
+		}
+
+		// return boolean
+		return hasFeature;
+	}
+
+	// randomly generate a specified number of patches of water
+	public void genWater(int numWater) {
+		
+		for (int i = 0; i < numWater; i++) {
+
+			// randomly pick coordinates within island boundaries
+			int x = (int) (Math.random() * this.width);
+			int y = (int) (Math.random() * this.height);
+			
+			// check position is not already occupied and try again until one is found. or, give up after 20 tries
+			int count = 0;
+			while ((isOccupied(x, y) || hasGeographicalFeature(x, y)) && count < 20) {
+				x = (int) (Math.random() * width);
+				y = (int) (Math.random() * height);
+				count++;
+			}
+			// create water
+			Water water = new Water(x, y);
+			
+			// set island on water to this island
+			water.setIsland(this);
+			
+			// add water to list of geographical features and water patches
+			this.geographicalFeatures.add(water);
+			this.waterPatches.add(water);
+		}
+	}
 	// randomly generate a specified number of patches of grass
 	public void genGrass(int numGrass) {
 
@@ -129,10 +144,9 @@ public class Island {
 			int x = (int) (Math.random() * this.width);
 			int y = (int) (Math.random() * this.height);
 
-			// check position is not already occupied and try again until one is found. or,
-			// give up after 20 tries
+			// check position is not already occupied and try again until one is found. or, give up after 20 tries
 			int count = 0;
-			while (isOccupied(x, y) || count > 20) {
+			while ((isOccupied(x, y) || hasGeographicalFeature(x, y)) && count < 20) {
 				x = (int) (Math.random() * width);
 				y = (int) (Math.random() * height);
 				count++;
@@ -149,37 +163,7 @@ public class Island {
 		}
 	}
 
-//	// randomly generate a specified number of animals
-//	public void genAnimals(int numAnimals) {
-//		
-//		for (int i = 0; i < numAnimals; i++) {
-//			
-//			// randomly pick position. note that positions run from 0 to width - 1 and 0 to
-//			// height - 1
-//			int x = (int) (Math.random() * width);
-//			int y = (int) (Math.random() * height);
-//			
-//			// check position is not already occupied and try again until one is found. or,
-//			// give up after 20 tries
-//			int count = 0;
-//			while (isOccupied(x, y) || count > 20) {
-//				x = (int) (Math.random() * width);
-//				y = (int) (Math.random() * height);
-//				count++;
-//			}
-//			
-//			// randomly pick energy level from 5 through 30.
-//			int energy = (int) (Math.random() * 25 + 5);
-//			
-//			animal = new Rabbit(x, y, energy);
-//			
-//			// add animal to this island's list of animals, and to animal's island attribute
-//			this.animals.add(animal);
-//			animal.setIsland(this);
-//		}
-//	}
-
-	// randomly generate a specified number of rabbits
+	// randomly generate a specified number of animals
 	public void genAnimals(int numAnimals) {
 
 		for (int i = 0; i < numAnimals; i++) {
@@ -192,7 +176,7 @@ public class Island {
 			// check position is not already occupied and try again until one is found. or,
 			// give up after 20 tries
 			int count = 0;
-			while (isOccupied(x, y) || count > 20) {
+			while (isOccupied(x, y) && count < 20) {
 				x = (int) (Math.random() * width);
 				y = (int) (Math.random() * height);
 				count++;
@@ -325,8 +309,14 @@ public class Island {
 		// loop over all animals
 		for (Animal a : this.animals) {
 
-			// check if animal is hungry
-			if (a.isHungry()) {
+			// check if animal is thirsty
+			if (a.isThirsty()) {
+				
+				// if animal is thirsty, check for water source and hydrate
+				a.drinkWater();
+				
+			// if not thirsty, check if animal is hungry
+			} else if (a.isHungry()) {
 
 				// have animal check for an immediate food source and spend this turn feeding if so.
 				// if animal is hungry but not at a food source, have the animal seek out food.
@@ -339,11 +329,12 @@ public class Island {
 				a.move(Math.random());
 			}
 
-			// reduce all animal's energy level by default amount
+			// reduce all animal's energy and hydration level by default amount
 			a.decreaseEnergy();
+			a.decreaseHydration();
 
-			// if the animal's energy has reduced to 0, add to list of dead.
-			if (a.getEnergy() == 0) {
+			// if the animal's energy or hydration has reduced to 0, add to list of dead.
+			if (a.getEnergy() == 0 || a.getHydration() == 0) {
 				deadAnimals.add(a);
 			}
 		}
@@ -366,9 +357,6 @@ public class Island {
 			}
 		}
 
-		// for testing purposes, show me the details of the animals and grasses:
-//		printAnimalInfo();
-//		printGeographicalFeatureInfo();
 	}
 
 	// run animation of island, updating and redrawing a specified number of times.
@@ -379,7 +367,6 @@ public class Island {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			this.drawIsland();
@@ -409,8 +396,7 @@ public class Island {
 	}
 
 	public void addAnimal(Animal animal) {
-		// check incoming animal's position is not already occupied before adding to
-		// island
+		// check incoming animal's position is not already occupied before adding to island
 		if (!isOccupied(animal.getX(), animal.getY())) {
 			this.animals.add(animal);
 		}

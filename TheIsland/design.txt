@@ -3,44 +3,27 @@ Zachary Di 300228054
 SWEN502 The Island
 
 class Island
-- Stores a list of Creatures
+- Stores a list of Animals
 - Stores a list of GeographicFeatures
 
-// yeugh. pretty sure the creatures should be a class. 'cause... they all do the same mf things
-way easier
-right?
-being able to move etc.
-i reckon. cool! okay. 
+Interface Animal
+class Rabbit implements Animal
+class Sparrow implements Animal
+class Kiwi implements Animal - can eat from ground at any location
+class Cat implements Animal
 
-Class Animal
-	class Rabbit extends Animal
-	class extends Animal
-
-interface Creature
-class Rabbit implements Creature
-class Sparrow implements Creature
-class Kiwi implements Creature - can eat from ground at any location
-// class Fish implements Creature - only live in water
-class Cat implements Creature
-// class Chicken implements Creature
-// class Crocodile implements Creature
-// class Cheetah implements Creature
-// class Rat implements Creature
-// class Platypus implements Creature
-// class Wolf implements Creature
-
-Creatures should have:
-- energy level, depletes with every movement, replenished by eating, if reaches 0, creature dies and is removed.
+Animals should have:
+- energy level, depletes with every movement, replenished by eating, if reaches 0, animal dies and is removed from island.
 - hydration level, depletes with every movement, replenished by visiting water.
 - x, y coordinates
 
- should be able to:
+ Animals should be able to:
 - move
-- detect food
-- detect water
+- detect nearby food
+- detect nearby water
 - detect predators
 - detect prey
-- mate with creatures of the same type
+- mate with animals of the same type
 
 interface GeographicFeature
 class Water implements GeographicFeature
@@ -51,16 +34,9 @@ class Plant implements GeographicFeature
 	class AppleTree extends Plants
 
 GeographicFeatures:
-- can coexist with a Creature at a point on the Island
+- can coexist with a Animal at a point on the Island
 - have coordinates x, y
 
 Plants have:
-- a size. grows with time and shrinks when fed on by a Creature. if size shrinks to 0, plant disappears
-- seeds which disperse randomly (are carried by feeding creatures? nice) to cause another plant of the same type to grow elsewhere
- 
-
-
-// class Brush implements GeographicFeature
-// class PineTree implements GeographicFeature
-class Grass implements GeographicFeature
-// class AppleTree implements GeographicFeature
+- a size. grows with time and shrinks when fed on by an Animal. if size shrinks to 0, plant removed from Island.
+- seeds which disperse randomly (are carried by feeding animals? nice) to cause another plant of the same type to grow elsewhere
